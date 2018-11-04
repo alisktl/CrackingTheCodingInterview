@@ -5,15 +5,17 @@ public class QuestionA {
 
 	public static boolean doesMatch(String pattern, String value) {
 		if (pattern.length() == 0) return value.length() == 0;
+
 		int size = value.length();
 		
-		for (int mainSize = 0; mainSize < size; mainSize++) {
+		for (int mainSize = 1; mainSize <= size; mainSize++) {
 			String main = value.substring(0, mainSize);
 			for (int altStart = mainSize; altStart <= size; altStart++) {
 				for (int altEnd = altStart; altEnd <= size; altEnd++) {
 					String alt = value.substring(altStart, altEnd);
 					String cand = buildFromPattern(pattern, main, alt);
-					if (cand.equals(value)) {
+
+					if (cand.equals(value) && (!alt.equals("") || mainSize == size)) {
 						System.out.println(main + ", " + alt);
 						return true;
 					}
@@ -37,7 +39,7 @@ public class QuestionA {
 	}	
 	
 	public static void main(String[] args) {
-		String[][] tests = {{"ababb", "backbatbackbatbat"}, {"abab", "backsbatbackbats"}, {"aba", "backsbatbacksbat"}};
+		String[][] tests = {{"", "a"}, {"a", ""}, {"", ""}, {"a", "abcde"}, {"ababb", "backbatbackbatbat"}, {"abab", "backsbatbackbats"}, {"aba", "backsbatbacksbat"}};
 		for (String[] test : tests) {
 			String pattern = test[0];
 			String value = test[1];
