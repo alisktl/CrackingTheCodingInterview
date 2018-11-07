@@ -9,10 +9,13 @@ public class Grid {
 	}
 	
 	/* Copy old values into new array, with an offset/shift applied to the row and columns. */
-	private void copyWithShift(boolean[][] oldGrid, boolean[][] newGrid, int shiftRow, int shiftColumn) {
+	private void copyWithShift(boolean[][] oldGrid, boolean[][] newGrid, boolean negativeExpansionLeft, boolean negativeExpansionTop) {
+		int oldGridHeight = oldGrid.length;
+		int oldGridWidth = oldGrid[0].length;
+
 		for (int r = 0; r < oldGrid.length; r++) {
 			for (int c = 0; c < oldGrid[0].length; c++) {
-				newGrid[r + shiftRow][c + shiftColumn] = oldGrid[r][c];
+				newGrid[r + (negativeExpansionLeft?oldGridHeight:0)][c + (negativeExpansionTop?oldGridWidth:0)] = oldGrid[r][c];
 			}
 		}
 	}
@@ -23,13 +26,13 @@ public class Grid {
 	 * ranges.
 	 */
 	private void ensureFit(Position position) {
-		int shiftRow = 0;
-		int shiftColumn = 0;
-		
+		boolean negativeExpansionLeft = false;
+		boolean negativeExpansionTop = false;
+
 		/* Calculate new number of rows. */
 		int numRows = grid.length;
 		if (position.row < 0) {
-			shiftRow = numRows;
+			negativeExpansionLeft = true;
 			numRows *= 2;
 		} else if (position.row >= numRows) {
 			numRows *= 2;
@@ -38,7 +41,7 @@ public class Grid {
 		/* Calculate new number of columns. */
 		int numColumns = grid[0].length;
 		if (position.column < 0) {
-			shiftColumn = numColumns;
+			negativeExpansionTop = true;
 			numColumns *= 2;
 		} else if (position.column >= numColumns) {
 			numColumns *= 2;
@@ -47,12 +50,12 @@ public class Grid {
 		/* Grow array, if necessary. Shift ant's position too. */
 		if (numRows != grid.length || numColumns != grid[0].length) {
 			boolean[][] newGrid = new boolean[numRows][numColumns];
-			copyWithShift(grid, newGrid, shiftRow, shiftColumn);
-			ant.adjustPosition(shiftRow, shiftColumn);
+			copyWithShift(grid, newGrid, negativeExpansionLeft, negativeExpansionTop);
+			ant.adjustPosition((negativeExpansionLeft?grid.length:0), (negativeExpansionTop?grid[0].length:0));
 			grid = newGrid;
 		}
 	}
-	
+
 	/* Flip color of cells. */
 	private void flip(Position position) {
 		int row = position.row;
