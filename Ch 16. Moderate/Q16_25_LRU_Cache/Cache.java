@@ -56,6 +56,7 @@ public class Cache {
 			listHead.prev = node;
 			node.next = listHead;
 			listHead = node;
+			listHead.prev = null;
 		}
 	}
 	
@@ -101,7 +102,7 @@ public class Cache {
 		}
 		
 		public String printForward() {
-			String data = "(" + key + "," + value + ")";
+			String data = "(" + key + "," + value + ",hasPrev: " + (prev != null) + ")";
 			if (next != null) {
 				return data + "->" + next.printForward();
 			} else {
