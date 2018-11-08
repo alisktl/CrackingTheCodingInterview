@@ -11,6 +11,9 @@ public class QuestionAlternate {
 	
 	/* pick M elements from original array, using only elements 0 through i (inclusive).*/
 	public static int[] pickMRecursively(int[] original, int m, int i) {
+		if (m > original.length || m < 0)
+			return null;
+
 		if (i + 1 < m) { // Not enough elements
 			return null; 
 		} else if (i + 1 == m) { // Base case -- copy first m elements into array
@@ -31,6 +34,9 @@ public class QuestionAlternate {
 
 	/* pick M elements from original array.*/
 	public static int[] pickMIteratively(int[] original, int m) {
+		if (m > original.length || m < 0)
+			return null;
+
 		int[] subset = new int[m];
 		
 		/* Fill in subset array with first part of original array */
